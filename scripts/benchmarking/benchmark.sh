@@ -1,5 +1,6 @@
 #!/bin/sh
 
 export PYTHONHASHSEED=0
-time lib_bgp_simulator
-
+profile_file="$(hostname)_$(date -Iminutes).profile"
+pypy -m cProfile -o $profile_file probe.py
+mv $profile_file ./benchmark_profiles/
