@@ -37,7 +37,7 @@ class Settings:
             'percent_adoptions': str(self.percent_adoptions),
             'adopt_as_classes': str(self.adopt_as_classes),
             'EngineInputCls': str(self.EngineInputCls),
-            'num_trials': str(self.num_trials),
+            'num_trials': self.num_trials,
             'BaseASCls': str(self.BaseASCls),
             'mp_method': str(self.mp_method)
         }
@@ -47,7 +47,7 @@ class Settings:
 
 def main(benchmark_settings):
     settings = benchmark_settings
-    Simulator.run(
+    Simulator().run(
                 graphs=[Graph(percent_adoptions=settings.percent_adoptions,
                               adopt_as_classes=settings.adopt_as_classes,
                               EngineInputCls=settings.EngineInputCls,
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     # Running Main
     # -----------------------------------------------------------
     settings = Settings()
-    main()
+    #main(settings)
     # -----------------------------------------------------------
 
     # Capture runtime and share with stdout
@@ -88,15 +88,14 @@ if __name__ == '__main__':
         writer = csv.DictWriter(tsvfile, delimiter='\t', fieldnames=fieldnames)
         # Get the benchmark settings
         settings_dict = settings.as_dict()
+        print(settings_dict)
         row = {
             'machine_name': os.uname().nodename,
             'timestamp': timestamp,
             'runtime': runtime,
             'tag': tag,
-            'mp_method': settings_dict.mp_method,
-            'num_trials': settings_dict.num_trials,
-            'adopt_as_classes': settings_dict.adopt_as_classes,
-            'engine': settings_dict.EngineInputCls
+            'mp_method': settings_dict['mp_method'],
+            'num_trials': settings_dict['num_trials']
         }
         writer.writerow(row)
     print("Results written")
