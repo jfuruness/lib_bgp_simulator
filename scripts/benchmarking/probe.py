@@ -22,7 +22,7 @@ class Settings:
                  percent_adoptions=[0, 5, 10, 20, 30, 60, 80, 100],
                  adopt_as_classes=[ROVAS],
                  EngineInputCls=SubprefixHijack,
-                 num_trials=1,
+                 num_trials=20,
                  BaseASCls=BGPAS,
                  mp_method=MPMethod.SINGLE_PROCESS):
         self.percent_adoptions = percent_adoptions
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     # Running Main
     # -----------------------------------------------------------
     settings = Settings()
-    #main(settings)
+    main(settings)
     # -----------------------------------------------------------
 
     # Capture runtime and share with stdout
@@ -82,13 +82,13 @@ if __name__ == '__main__':
         tag = sys.argv[1]
 
     # Save the results of the benchmark to TSV
-    with open('benchmark_results.tsv', 'a') as tsvfile:
+    with open('results.tsv', 'a') as tsvfile:
         fieldnames = ['machine_name', 'timestamp', 'runtime', 'tag', 'mp_method',
-                      'num_trials', 'adopt_as_classes', 'engine']
+                      'num_trials']
         writer = csv.DictWriter(tsvfile, delimiter='\t', fieldnames=fieldnames)
+        writer.writeheader()  # Comment this out if the file already exists
         # Get the benchmark settings
         settings_dict = settings.as_dict()
-        print(settings_dict)
         row = {
             'machine_name': os.uname().nodename,
             'timestamp': timestamp,
