@@ -4,6 +4,9 @@ import os
 import sys
 from pathlib import Path
 from datetime import datetime
+import random
+
+random.seed(0)
 
 from lib_bgp_simulator.simulator import Simulator
 from lib_bgp_simulator.simulator.graph.graph import Graph
@@ -86,7 +89,7 @@ if __name__ == '__main__':
         fieldnames = ['machine_name', 'timestamp', 'runtime', 'tag', 'mp_method',
                       'num_trials']
         writer = csv.DictWriter(tsvfile, delimiter='\t', fieldnames=fieldnames)
-        # writer.writeheader()  # Comment this out if the file already exists
+        writer.writeheader()  # Comment this out if the file already exists
         # Get the benchmark settings
         settings_dict = settings.as_dict()
         row = {
