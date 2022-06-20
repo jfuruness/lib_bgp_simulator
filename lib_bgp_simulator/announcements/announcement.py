@@ -6,6 +6,7 @@ from ..enums import Relationships
 
 _all_slots = dict()
 
+
 # Because of the two issues below, we MUST use
 # unsafe_hash and not frozen
 # We can't use their backports
@@ -44,23 +45,32 @@ class Announcement(YamlAble):
     # And it's just faster. We'd have to do larger timing tests to find out
     # more
     # NOTE: also add prefix_id reasoning to design_decisions
-    __slots__ = ("prefix", "timestamp", "as_path", "roa_valid_length",
-                 "roa_origin",
-                 "recv_relationship", "seed_asn", "withdraw", "traceback_end")
+    __slots__ = (
+        "prefix",
+        "timestamp",
+        "as_path",
+        "roa_valid_length",
+        "roa_origin",
+        "recv_relationship",
+        "seed_asn",
+        "withdraw",
+        "traceback_end",
+    )
 
-
-    def __init__(self,
-                 *,
-                 prefix: str,
-                 as_path: tuple,
-                 timestamp: int,
-                 seed_asn: int,
-                 roa_valid_length: bool,
-                 roa_origin: int,
-                 recv_relationship: Relationships,
-                 withdraw: bool = False,
-                 traceback_end: bool = False,
-                 communities: tuple = ()):
+    def __init__(
+        self,
+        *,
+        prefix: str,
+        as_path: tuple,
+        timestamp: int,
+        seed_asn: int,
+        roa_valid_length: bool,
+        roa_origin: int,
+        recv_relationship: Relationships,
+        withdraw: bool = False,
+        traceback_end: bool = False,
+        communities: tuple = (),
+    ):
         self.prefix: str = prefix
         self.as_path: tuple = as_path
         self.timestamp: int = timestamp
@@ -159,8 +169,9 @@ class Announcement(YamlAble):
         # singleton for speed
         if not cls_slots:
             # https://stackoverflow.com/a/6720815/8903959
-            cls_slots = chain.from_iterable(getattr(cls, '__slots__', [])
-                                            for cls in self.__class__.__mro__)
+            cls_slots = chain.from_iterable(
+                getattr(cls, "__slots__", []) for cls in self.__class__.__mro__
+            )
             cls_slots = tuple(list(cls_slots))
             _all_slots[self.__class__] = cls_slots
         return cls_slots
@@ -176,16 +187,16 @@ class Announcement(YamlAble):
         return {x: getattr(self, x) for x in self.all_slots}
 
     ##############
-# Yaml funcs #
-##############
+    # Yaml funcs #
+    ##############
 
     def __to_yaml_dict__(self):
-        """ This optional method is called when you call yaml.dump()"""
+        """This optional method is called when you call yaml.dump()"""
 
         return self._get_vars()
 
     @classmethod
     def __from_yaml_dict__(cls, dct, yaml_tag):
-        """ This optional method is called when you call yaml.load()"""
+        """This optional method is called when you call yaml.load()"""
 
         return cls(**dct)
