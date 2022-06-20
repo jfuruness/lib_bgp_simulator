@@ -25,7 +25,7 @@ class Settings:
                  percent_adoptions=[0, 5, 10, 20, 30, 60, 80, 100],
                  adopt_as_classes=[ROVAS],
                  EngineInputCls=SubprefixHijack,
-                 num_trials=20,
+                 num_trials=10,
                  BaseASCls=BGPAS,
                  mp_method=MPMethod.SINGLE_PROCESS):
         self.percent_adoptions = percent_adoptions
